@@ -35,12 +35,13 @@
   .logo-wrap { position: relative; z-index: 2; margin-bottom: 6px; }
   .logo-wrap img { width: min(220px, 55vw); height: auto; filter: brightness(0) invert(1); }
   .asporto-badge {
-    display: inline-block; background: rgba(255,255,255,0.2);
-    border: 1.5px solid rgba(255,255,255,0.5);
-    color: white; font-size: 0.75rem; font-weight: 700;
+    display: inline-block; background: rgba(255,255,255,0.95);
+    border: 2px solid white;
+    color: #1a6fa8; font-size: 0.85rem; font-weight: 800;
     letter-spacing: 3px; text-transform: uppercase;
-    padding: 4px 14px; border-radius: 20px; margin-bottom: 14px;
+    padding: 6px 18px; border-radius: 20px; margin-bottom: 16px;
     position: relative; z-index: 2;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
   }
 
 /* STICKY NAV */
@@ -80,9 +81,10 @@ font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
 .section-body.open { display: block; }
 
 .subsection-title {
-font-size: 0.72rem; font-weight: 800; letter-spacing: 3px;
-text-transform: uppercase; color: #2d8cc9;
-padding: 14px 18px 6px; border-top: 1px solid #e6f4fb; margin-top: 6px;
+font-size: 0.92rem; font-weight: 800; letter-spacing: 1.5px;
+text-transform: uppercase; color: #1a6fa8;
+padding: 14px 18px 8px; border-top: 2px solid #e6f4fb; margin-top: 6px;
+background: #f0f9fe;
 }
 .subsection-title:first-child { border-top: none; margin-top: 0; }
 
@@ -139,6 +141,58 @@ color: rgba(255,255,255,0.85); text-align: center; padding: 20px 16px 30px; font
 footer .coperto { font-size: 0.9rem; font-weight: 700; color: white; margin-bottom: 4px; }
 footer .extra { font-size: 0.75rem; opacity: 0.8; margin-top: 6px; }
 
+/* ADMIN FULL */
+.admin-section-tabs {
+display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px;
+}
+.admin-tab {
+padding: 6px 12px; border-radius: 16px; font-size: 0.75rem; font-weight: 700;
+border: 1.5px solid #a8d8f0; background: #e6f4fb; color: #1a6fa8; cursor: pointer;
+}
+.admin-tab.active { background: #2d8cc9; color: white; border-color: #2d8cc9; }
+.admin-section-panel { display: none; }
+.admin-section-panel.active { display: block; }
+.admin-product-card {
+background: #f8fcff; border: 1.5px solid #e6f4fb; border-radius: 12px;
+padding: 12px; margin-bottom: 10px; position: relative;
+}
+.admin-product-card input, .admin-product-card textarea {
+width: 100%; padding: 7px 10px; border: 1.5px solid #a8d8f0;
+border-radius: 8px; font-size: 0.85rem; margin-bottom: 6px;
+font-family: inherit;
+}
+.admin-product-card textarea { resize: vertical; min-height: 50px; }
+.admin-product-card input:focus, .admin-product-card textarea:focus {
+outline: none; border-color: #2d8cc9;
+}
+.admin-field-label {
+font-size: 0.68rem; font-weight: 800; color: #5a8aa0;
+letter-spacing: 1px; text-transform: uppercase; margin-bottom: 3px; display: block;
+}
+.admin-prices-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.admin-prices-row .price-field { flex: 1; min-width: 80px; }
+.admin-price-label {
+font-size: 0.65rem; color: #5a8aa0; font-weight: 700; margin-bottom: 2px; display: block;
+}
+.btn-delete {
+position: absolute; top: 10px; right: 10px;
+background: #ffe6e6; border: 1.5px solid #ffb3b3; color: #d00;
+border-radius: 8px; padding: 4px 10px; font-size: 0.78rem; font-weight: 700; cursor: pointer;
+}
+.btn-add-product {
+width: 100%; padding: 10px; border: 2px dashed #a8d8f0;
+border-radius: 12px; background: none; color: #2d8cc9;
+font-size: 0.9rem; font-weight: 700; cursor: pointer; margin-bottom: 10px;
+}
+.btn-add-product:hover { background: #e6f4fb; }
+.admin-mode-tabs {
+display: flex; gap: 8px; margin-bottom: 16px;
+}
+.admin-mode-tab {
+flex: 1; padding: 8px; border-radius: 10px; font-size: 0.82rem; font-weight: 700;
+border: 1.5px solid #a8d8f0; background: #e6f4fb; color: #1a6fa8; cursor: pointer; text-align: center;
+}
+.admin-mode-tab.active { background: #2d8cc9; color: white; border-color: #2d8cc9; }
 /* ADMIN */
 #admin-fab {
 position: fixed; top: 10px; right: 10px; z-index: 99999;
@@ -317,7 +371,7 @@ border-radius: 8px; font-size: 0.85rem; font-weight: 800; color: #1a6fa8; text-a
     </div>
   </div>
 
-  <div class="subsection-title">Dal Menù Antipasti</div>
+  
   <div class="item"><div class="item-left"><div class="item-name">Antipasto Caldo x2</div><div class="item-desc">Patatine fritte*, panelle*, verdure in pastella*, anelli di cipolla* e mozzarelline fritte*</div></div><div class="item-price" data-key="ANTIPASTO_CALDO">8,00€</div></div>
   <div class="item"><div class="item-left"><div class="item-name">Pata Cheddar e Bacon</div><div class="item-desc">Patatine fritte* con salsa cheddar e bacon croccante</div></div><div class="item-price" data-key="PATA_CHEDDAR">6,00€</div></div>
   <div class="item"><div class="item-left"><div class="item-name">Pollo Mix x2</div><div class="item-desc">Patatine fritte*, straccetti di pollo*, chicken nuggets*, alette piccanti* e stick mozzarella*</div></div><div class="item-price" data-key="POLLO_MIX">6,00€</div></div>
@@ -589,6 +643,315 @@ function toggle(header) {
 // ===== ADMIN =====
 var ADMIN_PWD = 'Believeit92!';
 
+// Menu data structure - built from DOM on load
+var menuData = {};
+
+function buildMenuData() {
+  menuData = {};
+  document.querySelectorAll('section[id]').forEach(function(section) {
+    var sectionId = section.getAttribute('id');
+    var sectionTitle = section.querySelector('h2') ? section.querySelector('h2').textContent.trim() : sectionId;
+    menuData[sectionId] = { title: sectionTitle, products: [] };
+    
+    section.querySelectorAll('.item').forEach(function(item, idx) {
+      var nameEl = item.querySelector('.item-name');
+      var descEl = item.querySelector('.item-desc');
+      var priceEl = item.querySelector('.item-price');
+      var pizzaPrices = item.querySelectorAll('.pizza-price');
+      var portionPrices = item.querySelectorAll('.price-format-val');
+      
+      if (!nameEl) return;
+      
+      var product = {
+        id: sectionId + '_' + idx,
+        name: nameEl.textContent.trim(),
+        desc: descEl ? descEl.textContent.trim() : '',
+        priceType: 'single',
+        price: '',
+        priceS: '', priceF: '',
+        portions: []
+      };
+      
+      if (priceEl) {
+        product.priceType = 'single';
+        product.price = priceEl.textContent.trim();
+      } else if (pizzaPrices.length === 2) {
+        product.priceType = 'pizza';
+        product.priceS = pizzaPrices[0].textContent.trim();
+        product.priceF = pizzaPrices[1].textContent.trim();
+      } else if (portionPrices.length > 0) {
+        product.priceType = 'portions';
+        portionPrices.forEach(function(p) {
+          var labelEl = p.closest('.price-format-item') ? p.closest('.price-format-item').querySelector('.price-format-label') : null;
+          product.portions.push({
+            label: labelEl ? labelEl.textContent.trim() : '',
+            value: p.textContent.trim()
+          });
+        });
+      }
+      
+      menuData[sectionId].products.push(product);
+    });
+  });
+}
+
+function renderAdminPanel() {
+  buildMenuData();
+  var panel = document.getElementById('admin-panel');
+  panel.innerHTML = '<p class="admin-note">Seleziona una sezione per modificare i prodotti.</p>';
+  
+  // Mode tabs
+  var modeTabs = document.createElement('div');
+  modeTabs.className = 'admin-mode-tabs';
+  modeTabs.innerHTML = '<div class="admin-mode-tab active" data-mode="edit" onclick="switchMode(this,'edit')">✏️ Modifica</div><div class="admin-mode-tab" data-mode="prices" onclick="switchMode(this,'prices')">💶 Solo Prezzi</div>';
+  panel.appendChild(modeTabs);
+  
+  // Section tabs
+  var tabs = document.createElement('div');
+  tabs.className = 'admin-section-tabs';
+  
+  var sections = [
+    {id:'antipasti', label:'Antipasti'},
+    {id:'pizze', label:'Pizze'},
+    {id:'pollo', label:'Pollo'},
+    {id:'rosticceria', label:'Rosticceria'},
+    {id:'bibite', label:'Bibite'},
+    {id:'vini', label:'Vini'}
+  ];
+  
+  sections.forEach(function(s, i) {
+    var tab = document.createElement('button');
+    tab.className = 'admin-tab' + (i===0?' active':'');
+    tab.textContent = s.label;
+    tab.setAttribute('data-section', s.id);
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.admin-tab').forEach(function(t){ t.classList.remove('active'); });
+      document.querySelectorAll('.admin-section-panel').forEach(function(p){ p.classList.remove('active'); });
+      tab.classList.add('active');
+      document.getElementById('admin-sp-' + s.id).classList.add('active');
+    });
+    tabs.appendChild(tab);
+  });
+  panel.appendChild(tabs);
+  
+  // Section panels
+  sections.forEach(function(s, i) {
+    var sp = document.createElement('div');
+    sp.className = 'admin-section-panel' + (i===0?' active':'');
+    sp.id = 'admin-sp-' + s.id;
+    renderSectionPanel(sp, s.id);
+    panel.appendChild(sp);
+  });
+  
+  // Save button
+  var saveBar = document.createElement('div');
+  saveBar.className = 'save-bar';
+  saveBar.innerHTML = '<button class="btn-blue" id="admin-salva-btn">💾 Salva Tutto</button><div class="firebase-status" id="fb-status"></div>';
+  panel.appendChild(saveBar);
+  document.getElementById('admin-salva-btn').addEventListener('click', saveAll);
+}
+
+function switchMode(btn, mode) {
+  document.querySelectorAll('.admin-mode-tab').forEach(function(t){ t.classList.remove('active'); });
+  btn.classList.add('active');
+  // Re-render panels in new mode
+  var activeSectionId = document.querySelector('.admin-tab.active') ? document.querySelector('.admin-tab.active').getAttribute('data-section') : 'antipasti';
+  document.querySelectorAll('.admin-section-panel').forEach(function(sp) {
+    var sid = sp.id.replace('admin-sp-','');
+    renderSectionPanel(sp, sid);
+  });
+}
+
+function getCurrentMode() {
+  var activeMode = document.querySelector('.admin-mode-tab.active');
+  return activeMode ? activeMode.getAttribute('data-mode') : 'edit';
+}
+
+function renderSectionPanel(container, sectionId) {
+  container.innerHTML = '';
+  var mode = getCurrentMode();
+  var products = menuData[sectionId] ? menuData[sectionId].products : [];
+  
+  products.forEach(function(product, idx) {
+    var card = document.createElement('div');
+    card.className = 'admin-product-card';
+    card.setAttribute('data-idx', idx);
+    card.setAttribute('data-section', sectionId);
+    
+    if (mode === 'edit') {
+      // Delete button
+      var delBtn = document.createElement('button');
+      delBtn.className = 'btn-delete';
+      delBtn.textContent = '✕ Elimina';
+      delBtn.addEventListener('click', function() {
+        if (confirm('Eliminare "' + product.name + '"?')) {
+          card.remove();
+        }
+      });
+      card.appendChild(delBtn);
+      
+      // Name
+      var nameLbl = document.createElement('span');
+      nameLbl.className = 'admin-field-label';
+      nameLbl.textContent = 'Nome';
+      card.appendChild(nameLbl);
+      var nameInput = document.createElement('input');
+      nameInput.type = 'text';
+      nameInput.value = product.name;
+      nameInput.className = 'admin-name';
+      card.appendChild(nameInput);
+      
+      // Description
+      if (product.priceType !== 'portions') {
+        var descLbl = document.createElement('span');
+        descLbl.className = 'admin-field-label';
+        descLbl.textContent = 'Ingredienti / Descrizione';
+        card.appendChild(descLbl);
+        var descInput = document.createElement('textarea');
+        descInput.value = product.desc;
+        descInput.className = 'admin-desc';
+        card.appendChild(descInput);
+      }
+    } else {
+      // Prices only mode - just show name
+      var nameOnly = document.createElement('span');
+      nameOnly.className = 'admin-field-label';
+      nameOnly.textContent = product.name;
+      nameOnly.style.fontSize = '0.82rem';
+      nameOnly.style.color = '#1a3a4a';
+      nameOnly.style.fontWeight = '700';
+      card.appendChild(nameOnly);
+    }
+    
+    // Prices
+    var priceLbl = document.createElement('span');
+    priceLbl.className = 'admin-field-label';
+    priceLbl.style.marginTop = '4px';
+    
+    if (product.priceType === 'single') {
+      priceLbl.textContent = 'Prezzo';
+      card.appendChild(priceLbl);
+      var priceInput = document.createElement('input');
+      priceInput.type = 'text';
+      priceInput.value = product.price;
+      priceInput.className = 'admin-price';
+      card.appendChild(priceInput);
+    } else if (product.priceType === 'pizza') {
+      priceLbl.textContent = 'Prezzi';
+      card.appendChild(priceLbl);
+      var row = document.createElement('div');
+      row.className = 'admin-prices-row';
+      row.innerHTML = '<div class="price-field"><span class="admin-price-label">Singola</span><input type="text" class="admin-price-s" value="' + product.priceS + '"></div><div class="price-field"><span class="admin-price-label">Familiare</span><input type="text" class="admin-price-f" value="' + product.priceF + '"></div>';
+      card.appendChild(row);
+    } else if (product.priceType === 'portions') {
+      priceLbl.textContent = 'Porzioni e Prezzi';
+      card.appendChild(priceLbl);
+      product.portions.forEach(function(p) {
+        var row = document.createElement('div');
+        row.style.display = 'flex'; row.style.gap = '6px'; row.style.marginBottom = '4px';
+        row.innerHTML = '<input type="text" placeholder="Etichetta" value="' + p.label + '" class="admin-portion-label" style="flex:1"><input type="text" placeholder="Prezzo" value="' + p.value + '" class="admin-portion-val" style="width:80px">';
+        card.appendChild(row);
+      });
+    }
+    
+    container.appendChild(card);
+  });
+  
+  // Add product button (edit mode only)
+  if (mode === 'edit') {
+    var addBtn = document.createElement('button');
+    addBtn.className = 'btn-add-product';
+    addBtn.textContent = '+ Aggiungi Prodotto';
+    addBtn.addEventListener('click', function() {
+      var newProduct = { name: '', desc: '', priceType: 'single', price: '', priceS: '', priceF: '', portions: [] };
+      menuData[sectionId].products.push(newProduct);
+      renderSectionPanel(container, sectionId);
+      container.scrollTop = container.scrollHeight;
+    });
+    container.appendChild(addBtn);
+  }
+}
+
+function saveAll() {
+  // Collect all data from admin cards and update DOM + Firebase
+  var allCards = document.querySelectorAll('.admin-product-card');
+  var updates = {};
+  
+  allCards.forEach(function(card) {
+    var sectionId = card.getAttribute('data-section');
+    var section = document.getElementById(sectionId);
+    if (!section) return;
+    
+    var idx = parseInt(card.getAttribute('data-idx'));
+    var items = section.querySelectorAll('.item');
+    var item = items[idx];
+    
+    var nameInput = card.querySelector('.admin-name');
+    var descInput = card.querySelector('.admin-desc');
+    var priceInput = card.querySelector('.admin-price');
+    var priceSInput = card.querySelector('.admin-price-s');
+    var priceFInput = card.querySelector('.admin-price-f');
+    
+    if (!item) return;
+    
+    if (nameInput) {
+      var nameEl = item.querySelector('.item-name');
+      if (nameEl) nameEl.childNodes[0].textContent = nameInput.value;
+    }
+    if (descInput) {
+      var descEl = item.querySelector('.item-desc');
+      if (descEl) descEl.textContent = descInput.value;
+    }
+    if (priceInput) {
+      var priceEl = item.querySelector('.item-price');
+      if (priceEl) {
+        priceEl.textContent = priceInput.value;
+        var key = priceEl.getAttribute('data-key');
+        if (key) updates[key] = priceInput.value;
+      }
+    }
+    if (priceSInput && priceFInput) {
+      var pizzaPrices = item.querySelectorAll('.pizza-price');
+      if (pizzaPrices[0]) {
+        pizzaPrices[0].textContent = priceSInput.value;
+        var key = pizzaPrices[0].getAttribute('data-key');
+        if (key) updates[key] = priceSInput.value;
+      }
+      if (pizzaPrices[1]) {
+        pizzaPrices[1].textContent = priceFInput.value;
+        var key = pizzaPrices[1].getAttribute('data-key');
+        if (key) updates[key] = priceFInput.value;
+      }
+    }
+  });
+  
+  // Handle deleted cards (items without corresponding card)
+  // Hide items whose cards were removed
+  document.querySelectorAll('section[id]').forEach(function(section) {
+    var sectionId = section.getAttribute('id');
+    var remainingCards = document.querySelectorAll('.admin-product-card[data-section="' + sectionId + '"]');
+    var items = section.querySelectorAll('.item');
+    items.forEach(function(item, idx) {
+      var cardExists = false;
+      remainingCards.forEach(function(card) {
+        if (parseInt(card.getAttribute('data-idx')) === idx) cardExists = true;
+      });
+      if (!cardExists) item.style.display = 'none';
+    });
+  });
+  
+  // Save prices to Firebase
+  document.getElementById('fb-status').textContent = 'Salvataggio...';
+  pricesRef.update(updates).then(function() {
+    document.getElementById('fb-status').textContent = '✅ Salvato!';
+    setTimeout(function() {
+      document.getElementById('admin-overlay').style.display = 'none';
+    }, 1200);
+  }).catch(function(e) {
+    document.getElementById('fb-status').textContent = '❌ ' + e.message;
+  });
+}
+
 document.getElementById('admin-fab').addEventListener('click', function() {
   document.getElementById('admin-overlay').style.display = 'flex';
   document.getElementById('admin-pwd').value = '';
@@ -619,73 +982,13 @@ function checkPwd() {
   if (pwd === ADMIN_PWD) {
     document.getElementById('admin-login').style.display = 'none';
     document.getElementById('admin-panel').style.display = 'block';
-    buildPriceList();
+    renderAdminPanel();
   } else {
     document.getElementById('admin-err').textContent = 'Password errata ✗';
   }
 }
 
-function buildPriceList() {
-  var list = document.getElementById('price-list');
-  list.innerHTML = '';
 
-  // Collect all data-key elements
-  var allKeys = {};
-
-  // item-price with data-key
-  document.querySelectorAll('.item-price[data-key], .pizza-price[data-key], .price-format-val[data-key], [data-key]').forEach(function(el) {
-    var key = el.getAttribute('data-key');
-    if (!key || allKeys[key]) return;
-    // Get the item name
-    var item = el.closest('.item');
-    var label = '';
-    if (item) {
-      var nameEl = item.querySelector('.item-name');
-      if (nameEl) label = nameEl.textContent.trim();
-      // For pizza prices add S/F
-      if (el.classList.contains('pizza-price')) {
-        label += key.endsWith('_S') ? ' (Singola)' : ' (Familiare)';
-      }
-      // For portions
-      if (el.classList.contains('price-format-val')) {
-        var labelEl = el.closest('.price-format-item').querySelector('.price-format-label');
-        if (labelEl) label += ' – ' + labelEl.textContent;
-      }
-    } else {
-      label = key.replace(/_/g, ' ');
-    }
-
-    allKeys[key] = true;
-    var row = document.createElement('div');
-    row.className = 'price-row';
-    var lbl = document.createElement('label');
-    lbl.textContent = label;
-    var input = document.createElement('input');
-    input.type = 'text';
-    input.value = el.textContent.trim();
-    input.setAttribute('data-key', key);
-    row.appendChild(lbl);
-    row.appendChild(input);
-    list.appendChild(row);
-  });
-}
-
-document.getElementById('admin-salva-btn').addEventListener('click', function() {
-  var inputs = document.querySelectorAll('#price-list input');
-  var data = {};
-  inputs.forEach(function(input) {
-    data[input.getAttribute('data-key')] = input.value.trim();
-  });
-  document.getElementById('fb-status').textContent = 'Salvataggio...';
-  pricesRef.set(data).then(function() {
-    document.getElementById('fb-status').textContent = '✅ Salvato!';
-    setTimeout(function() {
-      document.getElementById('admin-overlay').style.display = 'none';
-    }, 1200);
-  }).catch(function(e) {
-    document.getElementById('fb-status').textContent = '❌ Errore: ' + e.message;
-  });
-});
 </script>
 
 </body>
