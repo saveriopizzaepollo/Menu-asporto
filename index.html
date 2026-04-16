@@ -51,12 +51,26 @@ position: relative; z-index: 2;
 text-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 #admin-fab {
-position: absolute; top: 12px; right: 12px; z-index: 10;
-width: 34px; height: 34px; border-radius: 50%;
-background: rgba(255,255,255,0.2); border: 1.5px solid rgba(255,255,255,0.6);
-color: white; font-size: 1rem; cursor: pointer;
+position: fixed; top: 10px; right: 10px; z-index: 99999;
+width: 32px; height: 32px; border-radius: 50%;
+background: rgba(26,111,168,0.9); border: 1.5px solid rgba(255,255,255,0.7);
+color: white; font-size: 0.9rem; cursor: pointer;
 display: flex; align-items: center; justify-content: center;
+box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
+.lang-bar {
+position: fixed; top: 10px; right: 50px; z-index: 99999;
+display: flex; gap: 4px; align-items: center;
+}
+.lang-flag {
+width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
+border: 2px solid rgba(255,255,255,0.5);
+display: flex; align-items: center; justify-content: center;
+font-size: 1rem; background: rgba(26,111,168,0.85);
+box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+text-decoration: none;
+}
+.lang-flag.active { border-color: white; background: rgba(255,255,255,0.25); }
 
 /* STICKY NAV */
 nav {
@@ -299,8 +313,13 @@ border-radius: 8px; font-size: 0.85rem; font-weight: 800; color: #1a6fa8; text-a
 </head>
 <body>
 
-<!-- ADMIN OVERLAY -->
+<!-- LANG BAR -->
 
+<div class="lang-bar">
+  <button class="lang-flag active" id="btn-it" onclick="setLang('it',this)">🇮🇹</button>
+  <button class="lang-flag" id="btn-en" onclick="setLang('en',this)">🇬🇧</button>
+</div>
+<!-- ADMIN OVERLAY -->
 <div id="admin-overlay">
   <div id="admin-box">
     <button id="admin-close-btn">✕</button>
@@ -375,7 +394,7 @@ border-radius: 8px; font-size: 0.85rem; font-weight: 800; color: #1a6fa8; text-a
         WhatsApp
       </a>
     </div>
-    <p style="font-size:0.8rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:2px;margin-top:16px;margin-bottom:8px;">Contattaci qui</p>
+    <p style="font-size:0.8rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:2px;margin-top:16px;margin-bottom:8px;"><span class="contattaci-label">Contattaci qui</span></p>
     <div class="contact-numbers">
       <a href="tel:+393896388967" class="contact-number">
         <svg viewBox="0 0 24 24" fill="none" stroke="#2d8cc9" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.5a2 2 0 012-2.18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L9.91 14.5a16 16 0 006.59 6.59l.77-.77a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
@@ -481,7 +500,7 @@ border-radius: 8px; font-size: 0.85rem; font-weight: 800; color: #1a6fa8; text-a
       <h2>Pizze</h2><span class="chevron">▼</span>
     </div>
     <div class="section-body">
-      <div style="font-size:0.75rem;color:#5a8aa0;font-style:italic;padding:10px 18px 4px;">Farine alternative disponibili: Integrale, Kamut, Tumminia +2,00€</div>
+      <div style="font-size:0.75rem;color:#5a8aa0;font-style:italic;padding:10px 18px 4px;"><span class="farine-note">Farine alternative disponibili: Integrale, Kamut, Tumminia +2,00€</span></div>
       <div class="pizza-header">
         <span>Singola</span>
         <span>Familiare</span>
@@ -674,7 +693,7 @@ border-radius: 8px; font-size: 0.85rem; font-weight: 800; color: #1a6fa8; text-a
         WhatsApp
       </a>
     </div>
-    <p style="font-size:0.8rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:2px;margin-top:16px;margin-bottom:8px;">Contattaci qui</p>
+    <p style="font-size:0.8rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:2px;margin-top:16px;margin-bottom:8px;"><span class="contattaci-label">Contattaci qui</span></p>
     <div class="contact-numbers">
       <a href="tel:+393896388967" class="contact-number">
         <svg viewBox="0 0 24 24" fill="none" stroke="#2d8cc9" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.5a2 2 0 012-2.18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L9.91 14.5a16 16 0 006.59 6.59l.77-.77a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
@@ -844,6 +863,287 @@ var SECTIONS_CONFIG = [
   {id:'bibite', label:'Bibite'},
   {id:'vini', label:'Vini'}
 ];
+
+// ===== LANGUAGE SWITCHER =====
+var currentLang = 'it';
+
+var TRANSLATIONS = {
+  it: {
+    badge: 'Menù Asporto e Domicilio',
+    tagline: '&ldquo;La tua fame ci sta già seguendo,<br>ora tocca a te!&rdquo;',
+    contattaci: 'Contattaci qui',
+    nav: ['ANTIPASTI & CONTORNI','PIZZE','POLLO','BANCO ROSTICCERIA','BIBITE','VINI'],
+    antipasto_caldo: 'Patatine fritte*, panelle*, verdure in pastella*, anelli di cipolla* e mozzarelline fritte*',
+    pata_cheddar: 'Patatine fritte* con salsa cheddar e bacon croccante',
+    pollo_mix: 'Patatine fritte*, straccetti di pollo*, chicken nuggets*, alette piccanti* e stick mozzarella*',
+    bruschette_romana: 'Pomodoro, aglio, basilico, pepe, sale e olio e.v.o.',
+    tagliere_rosticceria: '10 pezzi rosticceria mignon misti',
+    mezzo_pollo: 'Con patate fritte e arancinette di riso. Su richiesta: patate al forno pizzaiola o bianche',
+    coscia: 'Con patate fritte e arancinette di riso. Su richiesta: patate al forno pizzaiola o bianche',
+    ros_fritta: 'Rosticceria Mignon Fritta',
+    ros_forno: 'Rosticceria Mignon al Forno',
+    pizza_taglio: 'Pizza a Taglio & Sfincione',
+    pizzette: 'Pizzette Croccanti',
+    pizzette_price: '1,00€ al pezzo',
+    piz1:'Pomodoro e Mozzarella', piz2:'Pomodoro, Mozzarella e Prosciutto Cotto',
+    piz3:'Salame Napoli, Pomodoro a Fette e Caciocavallo',
+    piz4:'Pomodoro, Mozzarella, Prosciutto Cotto e Wurstel',
+    piz5:'Pomodoro, Mozzarella e Wurstel',
+    piz6:'Pomodoro, Mozzarella e Salamino Piccante',
+    piz7:'Pomodoro, Mozzarella e Verdure Cotte al Forno',
+    insta_label:'Instagram', tiktok_label:'TikTok', google_label:'Recensioni', wa_label:'WhatsApp',
+    farine_note:'<span class="farine-note">Farine alternative disponibili: Integrale, Kamut, Tumminia +2,00€</span>'
+  },
+  en: {
+    badge: 'Takeaway & Delivery Menu',
+    tagline: '&ldquo;Your hunger is already following us,<br>now it\'s your turn!&rdquo;',
+    contattaci: 'Contact us here',
+    nav: ['STARTERS & SIDES','PIZZAS','CHICKEN','DELI COUNTER','DRINKS','WINES'],
+    antipasto_caldo: 'French fries*, fritters*, battered vegetables*, onion rings* and fried mozzarella sticks*',
+    pata_cheddar: 'French fries* with cheddar sauce and crispy bacon',
+    pollo_mix: 'French fries*, chicken strips*, nuggets*, hot wings* and mozzarella sticks*',
+    bruschette_romana: 'Tomato, garlic, basil, pepper, salt and extra virgin olive oil',
+    tagliere_rosticceria: '10 mixed mini bites',
+    mezzo_pollo: 'With french fries and rice arancini. On request: oven potatoes pizzaiola or plain',
+    coscia: 'With french fries and rice arancini. On request: oven potatoes pizzaiola or plain',
+    ros_fritta: 'Fried Mini Delicacies',
+    ros_forno: 'Oven-Baked Mini Delicacies',
+    pizza_taglio: 'Pizza by the Slice & Sfincione',
+    pizzette: 'Crispy Mini Pizzas',
+    pizzette_price: '1.00€ each',
+    piz1:'Tomato and Mozzarella', piz2:'Tomato, Mozzarella and Cooked Ham',
+    piz3:'Naples Salami, Sliced Tomato and Caciocavallo',
+    piz4:'Tomato, Mozzarella, Cooked Ham and Frankfurter',
+    piz5:'Tomato, Mozzarella and Frankfurter',
+    piz6:'Tomato, Mozzarella and Spicy Salami',
+    piz7:'Tomato, Mozzarella and Oven-Roasted Vegetables',
+    insta_label:'Instagram', tiktok_label:'TikTok', google_label:'Reviews', wa_label:'WhatsApp',
+    farine_note:'Alternative flours available: Wholemeal, Kamut, Tumminia +2.00€'
+  }
+};
+
+var PIZZA_TRANSLATIONS = {
+  'Mozzarella, emmenthal, grana e gorgonzola':'Mozzarella, emmental, grana and gorgonzola',
+  'Pomodoro, mozzarella, prosciutto cotto, carciofi e wurstel':'Tomato, mozzarella, cooked ham, artichokes and frankfurter',
+  'Pomodoro, mozzarella, pomodorini, crudo, rucola e grana':'Tomato, mozzarella, cherry tomatoes, cured ham, rocket and grana',
+  'Mozzarella':'Mozzarella',
+  'Pomodoro, mozzarella, spinaci e gorgonzola':'Tomato, mozzarella, spinach and gorgonzola',
+  'Pomodoro, mozzarella, salsiccia, salamino piccante, peperoni, cipolla e tabasco':'Tomato, mozzarella, sausage, spicy salami, peppers, onion and tabasco',
+  'Pomodoro a fette, aglio e caciocavallo':'Sliced tomato, garlic and caciocavallo',
+  'Pomodoro, mozzarella e prosciutto cotto':'Tomato, mozzarella and cooked ham',
+  'Pomodoro, mozzarella, prosciutto cotto, carciofi, funghi, olive nere e wurstel':'Tomato, mozzarella, cooked ham, artichokes, mushrooms, black olives and frankfurter',
+  'Bufala, pomodorini, prosciutto crudo, rucola e grana':'Buffalo mozzarella, cherry tomatoes, cured ham, rocket and grana',
+  'Bufala, fette di salmone, rucola, granella di pistacchio':'Buffalo mozzarella, salmon slices, rocket and pistachio crumble',
+  'Pomodoro, mozzarella, salamino piccante e cipolla':'Tomato, mozzarella, spicy salami and onion',
+  'Pomodoro, mozzarella, acciughe, cipolla, caciocavallo e mollica':'Tomato, mozzarella, anchovies, onion, caciocavallo and breadcrumbs',
+  'Ricotta e caciocavallo':'Ricotta and caciocavallo',
+  'Bufala, friarelli, salsiccia, pomodorini e grana':'Buffalo mozzarella, broccoli rabe, sausage, cherry tomatoes and grana',
+  'Pomodoro, mozzarella, salame napoli, emmenthal e wurstel':'Tomato, mozzarella, Naples salami, emmental and frankfurter',
+  'Bufala, pancetta coppata, scamorza affumicata, grana e noci':'Buffalo mozzarella, coppata pancetta, smoked scamorza, grana and walnuts',
+  'Mozzarella, ricotta, spinaci e caciocavallo':'Mozzarella, ricotta, spinach and caciocavallo',
+  'Pomodoro, mozzarella, prosciutto cotto, salame, melanzane, funghi, cipolla, gorgonzola':'Tomato, mozzarella, cooked ham, salami, aubergine, mushrooms, onion, gorgonzola',
+  'Pomodoro, mozzarella, melanzane, salamino, pomodorini e caciocavallo':'Tomato, mozzarella, aubergine, spicy salami, cherry tomatoes and caciocavallo',
+  'Pomodoro, mozzarella, melanzane, salsiccia e cipolla':'Tomato, mozzarella, aubergine, sausage and onion',
+  'Pomodoro e mozzarella':'Tomato and mozzarella',
+  'Bufala, prosciutto cotto, funghi, spinaci, mascarpone e grana':'Buffalo mozzarella, cooked ham, mushrooms, spinach, mascarpone and grana',
+  'Pomodoro, mozzarella, bacon, salsiccia, salamino piccante, cipolla e tabasco':'Tomato, mozzarella, bacon, sausage, spicy salami, onion and tabasco',
+  'Bufala, mortadella, pesto di pistacchio e granella di pistacchio':'Buffalo mozzarella, mortadella, pistachio pesto and pistachio crumble',
+  'Pomodoro, mozzarella e acciughe':'Tomato, mozzarella and anchovies',
+  'Pomodoro a fette, mozzarella, tonno e olive':'Sliced tomato, mozzarella, tuna and olives',
+  'Nutella e zucchero a velo':'Nutella and icing sugar',
+  'Pomodoro a fette, mozzarella, prosciutto cotto, salamino piccante, olive e grana':'Sliced tomato, mozzarella, cooked ham, spicy salami, olives and grana',
+  'Pomodoro, mozzarella, melanzane e parmigiano':'Tomato, mozzarella, aubergine and parmesan',
+  'Patè di olive, bufala, prosciutto crudo e provola':'Olive pâté, buffalo mozzarella, cured ham and provola',
+  'Pomodoro, mozzarella e patatine':'Tomato, mozzarella and french fries',
+  'Pesto di pistacchio, bufala, speck, zucchine, granella di pistacchio':'Pistachio pesto, buffalo mozzarella, speck, courgettes and pistachio crumble',
+  'Pomodoro, mozzarella, pollo, patatine e salsa BBQ':'Tomato, mozzarella, chicken, french fries and BBQ sauce',
+  'Condimento sfincione, caciocavallo e mollica':'Sfincione topping, caciocavallo and breadcrumbs',
+  'Pomodoro, mozzarella, porchetta, cipolla, emmenthal':'Tomato, mozzarella, porchetta, onion and emmental',
+  'Crema di funghi porcini, bufala, prosciutto cotto e grana':'Porcini cream, buffalo mozzarella, cooked ham and grana',
+  'Pomodoro, mozzarella, bresaola, rucola e grana':'Tomato, mozzarella, bresaola, rocket and grana',
+  'Pomodoro, bufala, prosciutto crudo, rucola e grana':'Tomato, buffalo mozzarella, cured ham, rocket and grana',
+  'Pomodoro a fette, mozzarella, melanzane, acciughe, salsiccia, cipolla, caciocavallo e olive':'Sliced tomato, mozzarella, aubergine, anchovies, sausage, onion, caciocavallo and olives',
+  'Crema di salmone, fette di salmone e uova di lompo':'Salmon cream, smoked salmon and lumpfish roe',
+  'Pomodoro, mozzarella, melanzane, salsiccia e grana':'Tomato, mozzarella, aubergine, sausage and grana',
+  'Pomodoro a fette, mozzarella, prosciutto cotto e caciocavallo':'Sliced tomato, mozzarella, cooked ham and caciocavallo',
+  'Mozzarella, pomodoro, pomodorini, emmenthal, bacon e sesamo':'Mozzarella, tomato, cherry tomatoes, emmental, bacon and sesame',
+  'Nutella, mascarpone e zucchero a velo':'Nutella, mascarpone and icing sugar',
+  'Pomodoro a fette, bufala, porchetta ed emmenthal':'Sliced tomato, buffalo mozzarella, porchetta and emmental',
+  'Crema di tartufo, bufala, funghi e grana':'Truffle cream, buffalo mozzarella, mushrooms and grana',
+  'Pomodoro a fette, bufala, rucola e grana':'Sliced tomato, buffalo mozzarella, rocket and grana',
+  'Pomodoro e verdure miste':'Tomato and mixed vegetables',
+  'Carne e piselli':'Meat and peas',
+  'Prosciutto cotto, mozzarella e besciamella':'Cooked ham, mozzarella and béchamel',
+  'Prosciutto cotto e mozzarella':'Cooked ham and mozzarella',
+  'Emmenthal, caciocavallo, mozzarella e parmigiano':'Emmental, caciocavallo, mozzarella and parmesan',
+  'Prosciutto cotto, mozzarella, funghi, parmigiano e besciamella':'Cooked ham, mozzarella, mushrooms, parmesan and béchamel',
+  'Melanzane, mozzarella, speck cotto e scaglie di grana':'Aubergine, mozzarella, cooked speck and grana flakes',
+  'Salamino piccante, pomodoro a fette e mozzarella':'Spicy salami, sliced tomato and mozzarella',
+  'Spinaci, prosciutto cotto, mozzarella e besciamella':'Spinach, cooked ham, mozzarella and béchamel',
+  'Ricotta e spinaci':'Ricotta and spinach',
+  'Wurstel':'Frankfurter',
+  'Acciuga, cipolla e pomodoro concentrato':'Anchovy, onion and tomato concentrate',
+  'Salsa di pomodoro, prosciutto cotto e mozzarella':'Tomato sauce, cooked ham and mozzarella',
+  'Con ricotta e caciocavallo':'With ricotta and caciocavallo',
+  'Funghi, prosciutto cotto, mozzarella, wurstel, pomodoro, sale, pepe, olio d\'oliva':'Mushrooms, cooked ham, mozzarella, frankfurter, tomato, salt, pepper, olive oil',
+  'Pomodoro, mozzarella, sale, pepe, olio d\'oliva':'Tomato, mozzarella, salt, pepper, olive oil',
+  'Pomodoro a fette, tuma, salame napoli, caciocavallo grattugiato, sale, pepe, olio d\'oliva':'Sliced tomato, tuma cheese, Naples salami, grated caciocavallo, salt, pepper, olive oil',
+  'Acciuga, salsa di pomodoro concentrato, cipolla, mollica aromatizzata al formaggio':'Anchovy, concentrated tomato sauce, onion, cheese-flavoured breadcrumbs'
+};
+
+// Store original IT values on first load
+var originalValues = {};
+function storeOriginals() {
+  // Badge
+  originalValues.badge = document.querySelector('.asporto-badge').textContent;
+  // Taglines
+  document.querySelectorAll('.social-tagline').forEach(function(el, i) {
+    originalValues['tagline_' + i] = el.innerHTML;
+  });
+  // Contattaci
+  document.querySelectorAll('.contattaci-label').forEach(function(el, i) {
+    originalValues['contattaci_' + i] = el.textContent;
+  });
+  // Nav
+  document.querySelectorAll('nav a').forEach(function(el, i) {
+    originalValues['nav_' + i] = el.textContent;
+  });
+  // Pizza descs
+  document.querySelectorAll('#pizze .item-desc').forEach(function(el, i) {
+    originalValues['pizza_desc_' + i] = el.textContent.trim();
+  });
+  // Farine notes
+  document.querySelectorAll('.farine-note').forEach(function(el, i) {
+    originalValues['farine_' + i] = el.textContent;
+  });
+}
+
+function setLang(lang, btn) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-flag').forEach(function(b){ b.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+  var t = TRANSLATIONS[lang];
+
+  // Badge
+  document.querySelector('.asporto-badge').textContent = t.badge;
+
+  // Taglines
+  document.querySelectorAll('.social-tagline').forEach(function(el) {
+    el.innerHTML = t.tagline;
+  });
+
+  // Contattaci
+  document.querySelectorAll('.contattaci-label').forEach(function(el) {
+    el.textContent = t.contattaci;
+  });
+
+  // Nav labels
+  var navLinks = document.querySelectorAll('nav a');
+  t.nav.forEach(function(label, i) {
+    if (navLinks[i]) navLinks[i].textContent = label;
+  });
+
+  // Social labels
+  document.querySelectorAll('.lbl-insta').forEach(function(el){ el.textContent = t.insta_label; });
+  document.querySelectorAll('.lbl-tiktok').forEach(function(el){ el.textContent = t.tiktok_label; });
+  document.querySelectorAll('.lbl-google').forEach(function(el){ el.textContent = t.google_label; });
+  document.querySelectorAll('.lbl-wa').forEach(function(el){ el.textContent = t.wa_label; });
+
+  // Antipasti specific descs
+  var antipastiDescs = {
+    'ANTIPASTO CALDO X2': t.antipasto_caldo,
+    'PATA CHEDDAR E BACON': t.pata_cheddar,
+    'POLLO MIX X2': t.pollo_mix,
+    'BRUSCHETTE ALLA ROMANA': t.bruschette_romana,
+    'TAGLIERE ROSTICCERIA MIGNON': t.tagliere_rosticceria
+  };
+  document.querySelectorAll('#antipasti .item').forEach(function(item) {
+    var nameEl = item.querySelector('.item-name');
+    var descEl = item.querySelector('.item-desc');
+    if (!nameEl) return;
+    var name = nameEl.textContent.trim().toUpperCase();
+    if (antipastiDescs[name] && descEl) {
+      descEl.textContent = antipastiDescs[name];
+    }
+  });
+
+  // Pollo descs
+  document.querySelectorAll('#pollo .item').forEach(function(item) {
+    var nameEl = item.querySelector('.item-name');
+    var descEl = item.querySelector('.item-desc');
+    if (!nameEl || !descEl) return;
+    var name = nameEl.textContent.trim().toUpperCase();
+    if (name.includes('POLLO') || name.includes('½')) descEl.textContent = t.mezzo_pollo;
+    if (name.includes('COSCIA')) descEl.textContent = t.coscia;
+  });
+
+  // Pizza descs
+  if (lang === 'en') {
+    document.querySelectorAll('#pizze .item-desc').forEach(function(el) {
+      var it = el.textContent.trim();
+      if (PIZZA_TRANSLATIONS[it]) el.textContent = PIZZA_TRANSLATIONS[it];
+    });
+  } else {
+    // Restore IT
+    document.querySelectorAll('#pizze .item-desc').forEach(function(el, i) {
+      if (originalValues['pizza_desc_' + i]) el.textContent = originalValues['pizza_desc_' + i];
+    });
+  }
+
+  // Farine note
+  document.querySelectorAll('.farine-note').forEach(function(el) {
+    el.textContent = t.farine_note;
+  });
+
+  // Rosticceria subtitles
+  document.querySelectorAll('#rosticceria .subsection-title').forEach(function(el) {
+    var txt = el.textContent.trim();
+    if (txt.includes('Fritta') || txt.includes('Fried')) el.textContent = t.ros_fritta;
+    else if (txt.includes('Forno') || txt.includes('Oven')) el.textContent = t.ros_forno;
+    else if (txt.includes('Taglio') || txt.includes('Slice')) {
+      el.innerHTML = t.pizza_taglio + ' — <span data-key="PIZZA_TAGLIO_KG">10,00€/kg</span>';
+    } else if (txt.includes('Croccant') || txt.includes('Crispy')) {
+      el.innerHTML = t.pizzette + ' — <span data-key="PIZZETTE_CROCCANTI_PEZZO">1,00€</span> ' + (lang==='en'?'each':'al pezzo');
+    }
+  });
+
+  // Rosticceria descs
+  if (lang === 'en') {
+    document.querySelectorAll('#rosticceria .item-desc').forEach(function(el) {
+      var it = el.textContent.trim();
+      if (PIZZA_TRANSLATIONS[it]) el.textContent = PIZZA_TRANSLATIONS[it];
+    });
+    // Pizzette names (they are item-names in rosticceria)
+    var pizzetteNames = [t.piz1,t.piz2,t.piz3,t.piz4,t.piz5,t.piz6,t.piz7];
+    var pizzetteItems = document.querySelectorAll('#rosticceria .subsection-title:last-of-type ~ .item .item-name');
+    // Better: find items after pizzette subsection
+    var inPizzette = false;
+    var pi = 0;
+    document.querySelectorAll('#rosticceria .subsection-title, #rosticceria .item').forEach(function(el) {
+      if (el.classList.contains('subsection-title')) {
+        inPizzette = el.textContent.includes('Crispy') || el.textContent.includes('Croccant');
+        pi = 0;
+      } else if (inPizzette) {
+        var nameEl = el.querySelector('.item-name');
+        if (nameEl && pizzetteNames[pi]) { nameEl.textContent = pizzetteNames[pi]; pi++; }
+      }
+    });
+  } else {
+    // Restore IT rosticceria
+    document.querySelectorAll('#rosticceria .item-desc').forEach(function(el, i) {
+      if (originalValues['ros_desc_' + i]) el.textContent = originalValues['ros_desc_' + i];
+    });
+  }
+}
+
+// Store IT originals on load
+document.addEventListener('DOMContentLoaded', function() {
+  // Store rosticceria descs
+  document.querySelectorAll('#rosticceria .item-desc').forEach(function(el, i) {
+    originalValues['ros_desc_' + i] = el.textContent.trim();
+  });
+  storeOriginals();
+});
 
 function buildAdminPanel() {
   var tabsEl = document.getElementById('admin-tabs');
