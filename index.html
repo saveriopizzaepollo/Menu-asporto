@@ -210,6 +210,47 @@ footer .coperto { font-size: 0.9rem; font-weight: 700; color: white; margin-bott
 footer .extra { font-size: 0.75rem; opacity: 0.8; margin-top: 6px; }
 
 /* ADMIN */
+.admin-tabs {
+display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap;
+}
+.admin-tab {
+padding: 6px 12px; border-radius: 16px; font-size: 0.75rem; font-weight: 700;
+border: 1.5px solid #a8d8f0; background: #e6f4fb; color: #1a6fa8; cursor: pointer;
+}
+.admin-tab.active { background: #2d8cc9; color: white; border-color: #2d8cc9; }
+.admin-sec-panel { display: none; }
+.admin-sec-panel.active { display: block; }
+.admin-card {
+background: #f8fcff; border: 1.5px solid #e0f0fb;
+border-radius: 12px; padding: 12px; margin-bottom: 8px; position: relative;
+}
+.admin-card input, .admin-card textarea {
+width: 100%; padding: 7px 10px; border: 1.5px solid #a8d8f0;
+border-radius: 8px; font-size: 0.85rem; margin-bottom: 6px; font-family: inherit;
+box-sizing: border-box;
+}
+.admin-card textarea { resize: vertical; min-height: 48px; }
+.admin-card input:focus, .admin-card textarea:focus { outline: none; border-color: #2d8cc9; }
+.admin-field-lbl {
+font-size: 0.65rem; font-weight: 800; color: #5a8aa0;
+letter-spacing: 1px; text-transform: uppercase;
+display: block; margin-bottom: 3px;
+}
+.admin-price-row { display: flex; gap: 6px; }
+.admin-price-col { flex: 1; }
+.admin-price-col-lbl { font-size: 0.62rem; color: #5a8aa0; font-weight: 700; margin-bottom: 2px; display: block; }
+.btn-del {
+position: absolute; top: 10px; right: 10px;
+background: #ffe6e6; border: 1.5px solid #ffb3b3;
+color: #cc0000; border-radius: 8px;
+padding: 3px 9px; font-size: 0.75rem; font-weight: 700; cursor: pointer;
+}
+.btn-add {
+width: 100%; padding: 9px; border: 2px dashed #a8d8f0;
+border-radius: 12px; background: none; color: #2d8cc9;
+font-size: 0.88rem; font-weight: 700; cursor: pointer; margin-top: 4px;
+}
+.btn-add:hover { background: #e6f4fb; }
 #admin-overlay {
 position: fixed; top:0; left:0; right:0; bottom:0;
 background: rgba(0,0,0,0.65); z-index: 999999;
@@ -272,10 +313,11 @@ border-radius: 8px; font-size: 0.85rem; font-weight: 800; color: #1a6fa8; text-a
       </div>
     </div>
     <div id="admin-panel" style="display:none">
-      <p class="admin-note">Modifica i prezzi e premi Salva.</p>
-      <div id="price-list"></div>
+      <p class="admin-note">Seleziona una sezione per modificare il menù.</p>
+      <div class="admin-tabs" id="admin-tabs"></div>
+      <div id="admin-sections"></div>
       <div class="save-bar">
-        <button class="btn-blue" id="admin-salva-btn">💾 Salva Prezzi</button>
+        <button class="btn-blue" id="admin-salva-btn">💾 Salva Tutto</button>
         <div class="firebase-status" id="fb-status"></div>
       </div>
     </div>
@@ -777,20 +819,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   document.getElementById('admin-salva-btn').addEventListener('click', function() {
-    var inputs = document.querySelectorAll('#price-list input');
-    var data = {};
-    inputs.forEach(function(input) {
-      data[input.getAttribute('data-key')] = input.value.trim();
-    });
-    document.getElementById('fb-status').textContent = 'Salvataggio...';
-    pricesRef.set(data).then(function() {
-      document.getElementById('fb-status').textContent = '✅ Salvato!';
-      setTimeout(function() {
-        document.getElementById('admin-overlay').style.display = 'none';
-      }, 1200);
-    }).catch(function(e) {
-      document.getElementById('fb-status').textContent = '❌ ' + e.message;
-    });
+    saveAllAdmin();
   });
 
 });
@@ -806,42 +835,259 @@ function checkPwd() {
   }
 }
 
-function buildPriceList() {
-  var list = document.getElementById('price-list');
-  list.innerHTML = '';
-  var seen = {};
-  document.querySelectorAll('section').forEach(function(section) {
-    var titleEl = section.querySelector('h2');
-    if (!titleEl) return;
-    var titleDiv = document.createElement('div');
-    titleDiv.className = 'price-section-title';
-    titleDiv.textContent = titleEl.textContent;
-    list.appendChild(titleDiv);
-    section.querySelectorAll('[data-key]').forEach(function(el) {
-      var key = el.getAttribute('data-key');
-      if (!key || seen[key]) return;
-      seen[key] = true;
-      var item = el.closest('.item');
-      var nameEl = item ? item.querySelector('.item-name') : null;
-      var labelEl = el.closest('.price-format-item') ? el.closest('.price-format-item').querySelector('.price-format-label') : null;
-      var name = nameEl ? nameEl.textContent.trim() : key.replace(/_/g,' ');
-      if (labelEl) name += ' – ' + labelEl.textContent.trim();
-      if (el.classList.contains('pizza-price')) {
-        name += key.endsWith('_S') ? ' (Singola)' : ' (Familiare)';
+// ===== FULL ADMIN SYSTEM =====
+var SECTIONS_CONFIG = [
+  {id:'antipasti', label:'Antipasti'},
+  {id:'pizze', label:'Pizze'},
+  {id:'pollo', label:'Pollo'},
+  {id:'rosticceria', label:'Rosticceria'},
+  {id:'bibite', label:'Bibite'},
+  {id:'vini', label:'Vini'}
+];
+
+function buildAdminPanel() {
+  var tabsEl = document.getElementById('admin-tabs');
+  var secsEl = document.getElementById('admin-sections');
+  tabsEl.innerHTML = '';
+  secsEl.innerHTML = '';
+
+  SECTIONS_CONFIG.forEach(function(sec, i) {
+    // Tab
+    var tab = document.createElement('button');
+    tab.className = 'admin-tab' + (i === 0 ? ' active' : '');
+    tab.textContent = sec.label;
+    tab.setAttribute('data-sec', sec.id);
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.admin-tab').forEach(function(t){ t.classList.remove('active'); });
+      document.querySelectorAll('.admin-sec-panel').forEach(function(p){ p.classList.remove('active'); });
+      tab.classList.add('active');
+      document.getElementById('adm-sec-' + sec.id).classList.add('active');
+    });
+    tabsEl.appendChild(tab);
+
+    // Panel
+    var panel = document.createElement('div');
+    panel.className = 'admin-sec-panel' + (i === 0 ? ' active' : '');
+    panel.id = 'adm-sec-' + sec.id;
+    renderSectionCards(panel, sec.id);
+    secsEl.appendChild(panel);
+  });
+}
+
+function renderSectionCards(container, sectionId) {
+  container.innerHTML = '';
+  var section = document.getElementById(sectionId);
+  if (!section) return;
+  var items = section.querySelectorAll('.item');
+
+  items.forEach(function(item, idx) {
+    if (item.style.display === 'none') return;
+    var nameEl = item.querySelector('.item-name');
+    var descEl = item.querySelector('.item-desc');
+    var priceEl = item.querySelector('.item-price');
+    var pizzaPrices = item.querySelectorAll('.pizza-price');
+    var portionVals = item.querySelectorAll('.price-format-val');
+    var portionLabels = item.querySelectorAll('.price-format-label');
+    if (!nameEl) return;
+
+    var card = document.createElement('div');
+    card.className = 'admin-card';
+    card.setAttribute('data-section', sectionId);
+    card.setAttribute('data-idx', idx);
+
+    // Delete button
+    var delBtn = document.createElement('button');
+    delBtn.className = 'btn-del';
+    delBtn.textContent = '✕';
+    delBtn.addEventListener('click', function() {
+      if (confirm('Eliminare questo prodotto?')) {
+        item.style.display = 'none';
+        card.remove();
       }
+    });
+    card.appendChild(delBtn);
+
+    // Name
+    var nameLbl = document.createElement('span');
+    nameLbl.className = 'admin-field-lbl';
+    nameLbl.textContent = 'Nome';
+    card.appendChild(nameLbl);
+    var nameInput = document.createElement('input');
+    nameInput.type = 'text';
+    nameInput.value = nameEl.textContent.trim();
+    nameInput.className = 'adm-name';
+    card.appendChild(nameInput);
+
+    // Description
+    var descLbl = document.createElement('span');
+    descLbl.className = 'admin-field-lbl';
+    descLbl.textContent = 'Descrizione / Ingredienti';
+    card.appendChild(descLbl);
+    var descTa = document.createElement('textarea');
+    descTa.value = descEl ? descEl.textContent.trim() : '';
+    descTa.className = 'adm-desc';
+    card.appendChild(descTa);
+
+    // Prices
+    var priceLbl = document.createElement('span');
+    priceLbl.className = 'admin-field-lbl';
+    priceLbl.textContent = 'Prezzo';
+    card.appendChild(priceLbl);
+
+    if (priceEl) {
+      var priceInput = document.createElement('input');
+      priceInput.type = 'text';
+      priceInput.value = priceEl.textContent.trim();
+      priceInput.className = 'adm-price';
+      if (priceEl.getAttribute('data-key')) priceInput.setAttribute('data-key', priceEl.getAttribute('data-key'));
+      card.appendChild(priceInput);
+    } else if (pizzaPrices.length >= 2) {
       var row = document.createElement('div');
-      row.className = 'price-row';
-      var lbl = document.createElement('label');
-      lbl.textContent = name;
-      var input = document.createElement('input');
-      input.type = 'text';
-      input.value = el.textContent.trim();
-      input.setAttribute('data-key', key);
-      row.appendChild(lbl);
-      row.appendChild(input);
-      list.appendChild(row);
+      row.className = 'admin-price-row';
+      ['Singola','Familiare'].forEach(function(label, pi) {
+        var col = document.createElement('div');
+        col.className = 'admin-price-col';
+        var colLbl = document.createElement('span');
+        colLbl.className = 'admin-price-col-lbl';
+        colLbl.textContent = label;
+        col.appendChild(colLbl);
+        var inp = document.createElement('input');
+        inp.type = 'text';
+        inp.value = pizzaPrices[pi] ? pizzaPrices[pi].textContent.trim() : '';
+        inp.className = pi === 0 ? 'adm-price-s' : 'adm-price-f';
+        if (pizzaPrices[pi] && pizzaPrices[pi].getAttribute('data-key')) {
+          inp.setAttribute('data-key', pizzaPrices[pi].getAttribute('data-key'));
+        }
+        col.appendChild(inp);
+        row.appendChild(col);
+      });
+      card.appendChild(row);
+    } else if (portionVals.length > 0) {
+      portionVals.forEach(function(pv, pi) {
+        var row = document.createElement('div');
+        row.className = 'admin-price-row';
+        row.style.marginBottom = '4px';
+        var col1 = document.createElement('div');
+        col1.className = 'admin-price-col';
+        var lbl1 = document.createElement('span');
+        lbl1.className = 'admin-price-col-lbl';
+        lbl1.textContent = portionLabels[pi] ? portionLabels[pi].textContent : 'Porzione';
+        col1.appendChild(lbl1);
+        var inp1 = document.createElement('input');
+        inp1.type = 'text';
+        inp1.value = pv.textContent.trim();
+        inp1.className = 'adm-portion';
+        if (pv.getAttribute('data-key')) inp1.setAttribute('data-key', pv.getAttribute('data-key'));
+        col1.appendChild(inp1);
+        row.appendChild(col1);
+        card.appendChild(row);
+      });
+    }
+
+    container.appendChild(card);
+  });
+
+  // Add product button
+  var addBtn = document.createElement('button');
+  addBtn.className = 'btn-add';
+  addBtn.textContent = '+ Aggiungi prodotto';
+  addBtn.addEventListener('click', function() {
+    addNewProduct(sectionId, container);
+  });
+  container.appendChild(addBtn);
+}
+
+function addNewProduct(sectionId, container) {
+  var section = document.getElementById(sectionId);
+  if (!section) return;
+
+  // Create new item in DOM
+  var newItem = document.createElement('div');
+  newItem.className = 'item';
+  newItem.innerHTML = '<div class="item-left"><div class="item-name"></div><div class="item-desc"></div></div><div class="item-price"></div>';
+  var body = section.querySelector('.section-body');
+  if (body) body.appendChild(newItem);
+
+  // Re-render cards
+  renderSectionCards(container, sectionId);
+  container.scrollTop = container.scrollHeight;
+}
+
+function saveAllAdmin() {
+  var fbUpdates = {};
+
+  document.querySelectorAll('.admin-card').forEach(function(card) {
+    var sectionId = card.getAttribute('data-section');
+    var idx = parseInt(card.getAttribute('data-idx'));
+    var section = document.getElementById(sectionId);
+    if (!section) return;
+
+    var items = section.querySelectorAll('.item');
+    var item = items[idx];
+    if (!item) return;
+
+    var nameEl = item.querySelector('.item-name');
+    var descEl = item.querySelector('.item-desc');
+    var priceEl = item.querySelector('.item-price');
+    var pizzaPrices = item.querySelectorAll('.pizza-price');
+    var portionVals = item.querySelectorAll('.price-format-val');
+
+    var nameInput = card.querySelector('.adm-name');
+    var descInput = card.querySelector('.adm-desc');
+    var priceInput = card.querySelector('.adm-price');
+    var priceSInput = card.querySelector('.adm-price-s');
+    var priceFInput = card.querySelector('.adm-price-f');
+    var portionInputs = card.querySelectorAll('.adm-portion');
+
+    if (nameInput && nameEl) nameEl.textContent = nameInput.value;
+    if (descInput) {
+      if (descEl) {
+        descEl.textContent = descInput.value;
+      } else if (descInput.value) {
+        var newDesc = document.createElement('div');
+        newDesc.className = 'item-desc';
+        newDesc.textContent = descInput.value;
+        var left = item.querySelector('.item-left');
+        if (left) left.appendChild(newDesc);
+      }
+    }
+    if (priceInput && priceEl) {
+      priceEl.textContent = priceInput.value;
+      var k = priceInput.getAttribute('data-key');
+      if (k) fbUpdates[k] = priceInput.value;
+    }
+    if (priceSInput && pizzaPrices[0]) {
+      pizzaPrices[0].textContent = priceSInput.value;
+      var k = priceSInput.getAttribute('data-key');
+      if (k) fbUpdates[k] = priceSInput.value;
+    }
+    if (priceFInput && pizzaPrices[1]) {
+      pizzaPrices[1].textContent = priceFInput.value;
+      var k = priceFInput.getAttribute('data-key');
+      if (k) fbUpdates[k] = priceFInput.value;
+    }
+    portionInputs.forEach(function(inp, pi) {
+      if (portionVals[pi]) {
+        portionVals[pi].textContent = inp.value;
+        var k = inp.getAttribute('data-key');
+        if (k) fbUpdates[k] = inp.value;
+      }
     });
   });
+
+  document.getElementById('fb-status').textContent = 'Salvataggio...';
+  pricesRef.update(fbUpdates).then(function() {
+    document.getElementById('fb-status').textContent = '✅ Salvato!';
+    setTimeout(function() {
+      document.getElementById('admin-overlay').style.display = 'none';
+    }, 1200);
+  }).catch(function(e) {
+    document.getElementById('fb-status').textContent = '❌ ' + e.message;
+  });
+}
+
+function buildPriceList() {
+  buildAdminPanel();
 }
 </script>
 
