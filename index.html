@@ -25,25 +25,30 @@
   }
 
 /* HEADER */
+@import url(‘https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap’);
 header {
 position: relative; z-index: 1;
 background: linear-gradient(160deg, #2d8cc9 0%, #1a6fa8 100%);
-padding: 24px 20px 0; text-align: center; overflow: hidden;
+padding: 24px 20px 36px; text-align: center; overflow: hidden;
 }
 header::after {
-content: “”; position: absolute; bottom: -30px; left: -10%; right: -10%; height: 60px;
+content: “”; position: absolute; bottom: -2px; left: -5%; right: -5%; height: 50px;
 background: #f0f9fe; border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+z-index: 1;
 }
-.logo-wrap { position: relative; z-index: 2; margin-bottom: 6px; }
+.logo-wrap { position: relative; z-index: 2; margin-bottom: 8px; }
 .logo-wrap img { width: min(220px, 55vw); height: auto; filter: brightness(0) invert(1); }
 .asporto-badge {
-display: inline-block; background: rgba(255,255,255,0.95);
-border: 2px solid white; color: #1a6fa8;
-font-size: 0.8rem; font-weight: 800;
-letter-spacing: 2px; text-transform: uppercase;
-padding: 6px 18px; border-radius: 20px; margin-bottom: 16px;
+display: block;
+background: none; border: none;
+color: white;
+font-family: ‘Bebas Neue’, -apple-system, sans-serif;
+font-size: clamp(1.4rem, 6vw, 1.9rem);
+font-weight: 400;
+letter-spacing: 4px; text-transform: uppercase;
+padding: 0; margin-bottom: 20px;
 position: relative; z-index: 2;
-box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+text-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 #admin-fab {
 position: absolute; top: 12px; right: 12px; z-index: 10;
@@ -56,13 +61,26 @@ display: flex; align-items: center; justify-content: center;
 /* STICKY NAV */
 nav {
 position: sticky; top: 0; z-index: 100; background: white;
-border-bottom: 2px solid #a8d8f0;
 box-shadow: 0 2px 14px rgba(45,140,201,0.13);
 overflow-x: auto; white-space: nowrap;
-padding: 10px 12px; display: flex; gap: 8px;
+padding: 10px 12px 8px; display: flex; gap: 8px;
 -webkit-overflow-scrolling: touch; scrollbar-width: none;
 }
 nav::-webkit-scrollbar { display: none; }
+.nav-scroll-indicator {
+position: sticky; top: 44px; z-index: 100;
+height: 3px; background: white;
+padding: 0 12px;
+}
+.nav-scroll-track {
+height: 2px; background: rgba(168,216,240,0.5);
+border-radius: 2px; position: relative;
+}
+.nav-scroll-thumb {
+position: absolute; top: 0; height: 2px;
+background: #2d8cc9; border-radius: 2px;
+min-width: 30px; transition: left 0.1s;
+}
 nav a {
 display: inline-block; padding: 8px 16px; border-radius: 20px;
 font-size: 0.82rem; font-weight: 800; text-decoration: none;
@@ -315,6 +333,7 @@ border-radius: 8px; font-size: 0.85rem; font-weight: 800; color: #1a6fa8; text-a
         WhatsApp
       </a>
     </div>
+    <p style="font-size:0.8rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:2px;margin-top:16px;margin-bottom:8px;">Contattaci qui</p>
     <div class="contact-numbers">
       <a href="tel:+393896388967" class="contact-number">
         <svg viewBox="0 0 24 24" fill="none" stroke="#2d8cc9" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.5a2 2 0 012-2.18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L9.91 14.5a16 16 0 006.59 6.59l.77-.77a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
@@ -613,6 +632,7 @@ border-radius: 8px; font-size: 0.85rem; font-weight: 800; color: #1a6fa8; text-a
         WhatsApp
       </a>
     </div>
+    <p style="font-size:0.8rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:2px;margin-top:16px;margin-bottom:8px;">Contattaci qui</p>
     <div class="contact-numbers">
       <a href="tel:+393896388967" class="contact-number">
         <svg viewBox="0 0 24 24" fill="none" stroke="#2d8cc9" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.5a2 2 0 012-2.18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L9.91 14.5a16 16 0 006.59 6.59l.77-.77a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
@@ -681,6 +701,23 @@ document.addEventListener('DOMContentLoaded', function() {
     nav.addEventListener('scroll', updateNavThumb);
     updateNavThumb();
   }
+
+  // Scroll indicator
+  var nav = document.getElementById('mainnav');
+  var thumb = document.getElementById('nav-thumb');
+  function updateThumb() {
+    if (!nav || !thumb) return;
+    var track = thumb.parentElement;
+    var trackW = track.offsetWidth;
+    var ratio = nav.clientWidth / nav.scrollWidth;
+    var thumbW = Math.max(30, ratio * trackW);
+    var maxScroll = nav.scrollWidth - nav.clientWidth;
+    var pos = maxScroll > 0 ? (nav.scrollLeft / maxScroll) * (trackW - thumbW) : 0;
+    thumb.style.width = thumbW + 'px';
+    thumb.style.left = pos + 'px';
+  }
+  if (nav) { nav.addEventListener('scroll', updateThumb); updateThumb(); }
+  window.addEventListener('resize', updateThumb);
 
   var navLinks = document.querySelectorAll('nav a');
   navLinks.forEach(function(link) {
