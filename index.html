@@ -193,6 +193,11 @@ gap: 10px; padding: 10px 18px; border-bottom: 1px solid #f0f8fd;
 font-size: 1.05rem; font-weight: 800; color: var(–text);
 line-height: 1.3; text-transform: uppercase; letter-spacing: 0.5px;
 }
+.item-name-tr {
+display: block; font-size: 0.76rem; font-weight: 400;
+color: #8ab0c0; text-transform: none; letter-spacing: 0;
+margin-top: 1px;
+}
 .item-desc { font-size: 0.88rem; color: var(–text-light); line-height: 1.4; margin-top: 2px; }
 .item-price { font-size: 0.95rem; font-weight: 800; color: var(–price); white-space: nowrap; flex-shrink: 0; }
 .item-price-multi { font-size: 0.82rem; font-weight: 700; color: var(–price); white-space: normal; flex-shrink: 0; text-align: right; max-width: 160px; }
@@ -486,8 +491,8 @@ border-radius: 8px; font-size: 0.85rem; font-weight: 800; color: #1a6fa8; text-a
   <div class="item"><div class="item-left"><div class="item-name">Antipasto Caldo x2</div><div class="item-desc">Patatine fritte*, panelle*, verdure in pastella*, anelli di cipolla* e mozzarelline fritte*</div></div><div class="item-price" data-key="ANTIPASTO_CALDO">8,00€</div></div>
   <div class="item"><div class="item-left"><div class="item-name">Pata Cheddar e Bacon</div><div class="item-desc">Patatine fritte* con salsa cheddar e bacon croccante</div></div><div class="item-price" data-key="PATA_CHEDDAR">6,00€</div></div>
   <div class="item"><div class="item-left"><div class="item-name">Pollo Mix x2</div><div class="item-desc">Patatine fritte*, straccetti di pollo*, chicken nuggets*, alette piccanti* e stick mozzarella*</div></div><div class="item-price" data-key="POLLO_MIX">6,00€</div></div>
-  <div class="item"><div class="item-left"><div class="item-name">Bruschette alla Romana</div><div class="item-desc">Pomodoro, aglio, basilico, pepe, sale e olio e.v.o.</div></div><div class="item-price" data-key="BRUSCHETTE_ROMANA">4,00€</div></div>
-  <div class="item"><div class="item-left"><div class="item-name">Bruschette Miste</div></div><div class="item-price" data-key="BRUSCHETTE_MISTE">6,00€</div></div>
+  <div class="item"><div class="item-left"><div class="item-name">Bruschette alla Romana</div><div class="item-desc">4 pezzi · Panpizza con pomodorini a cubetti, olio e.v.o., sale e pepe</div></div><div class="item-price" data-key="BRUSCHETTE_ROMANA">4,00€</div></div>
+  <div class="item"><div class="item-left"><div class="item-name">Bruschette Miste</div><div class="item-desc">4 pezzi · 1 Romana, 1 Prosciutto crudo e pomodorini, 1 Salmone, 1 Bresaola e pomodorini</div></div><div class="item-price" data-key="BRUSCHETTE_MISTE">6,00€</div></div>
   <div class="item"><div class="item-left"><div class="item-name">Tagliere Salumi e Formaggi x2</div></div><div class="item-price" data-key="TAGLIERE_SALUMI">15,00€</div></div>
   <div class="item"><div class="item-left"><div class="item-name">Tagliere Rosticceria Mignon</div><div class="item-desc">10 pezzi rosticceria mignon misti</div></div><div class="item-price" data-key="TAGLIERE_ROSTICCERIA">12,00€</div></div>
 </div>
@@ -917,7 +922,7 @@ var TRANSLATIONS = {
     piz5:'Tomato, Mozzarella and Frankfurter',
     piz6:'Tomato, Mozzarella and Spicy Salami',
     piz7:'Tomato, Mozzarella and Oven-Roasted Vegetables',
-    insta_label:'Instagram', tiktok_label:'TikTok', google_label:'Reviews', wa_label:'WhatsApp',
+    insta_label:'Instagram', tiktok_label:'TikTok', google_label:'Google Reviews', wa_label:'WhatsApp',
     farine_note:'Alternative flours available: Wholemeal, Kamut, Tumminia +2.00€'
   }
 };
@@ -1018,11 +1023,162 @@ function storeOriginals() {
   });
 }
 
+var ALL_EN_NAMES = {
+  'Patatine Fritte': 'French Fries',
+  'Patate con Buccia': 'Skin-On Potatoes',
+  'Arancinette di Riso': 'Rice Arancini',
+  'Patate al Forno Pizzaiola': 'Oven Potatoes Pizzaiola',
+  'Patate al Forno Bianche': 'Plain Oven Potatoes',
+  'Antipasto Caldo x2': 'Hot Starter x2',
+  'Pata Cheddar e Bacon': 'Cheddar & Bacon Fries',
+  'Pollo Mix x2': 'Chicken Mix x2',
+  'Bruschette alla Romana': 'Roman Bruschetta',
+  'Bruschette Miste': 'Mixed Bruschetta',
+  'Tagliere Salumi e Formaggi x2': 'Charcuterie & Cheese Board x2',
+  'Tagliere Rosticceria Mignon': 'Mixed Bites Board',
+  '4 Formaggi': '4 Cheeses',
+  '4 Gusti': '4 Flavours',
+  '4 Stagioni': '4 Seasons',
+  'Biancaneve': 'Snow White',
+  'Braccio di Ferro': 'Popeye',
+  'Brasiliana': 'Brazilian',
+  'Bruschetta': 'Bruschetta',
+  'Calzone': 'Calzone',
+  'Calzone Fritto': 'Fried Calzone',
+  'Calzone Rustico': 'Rustic Calzone',
+  'Capricciosa': 'Capricciosa',
+  'Covaccina': 'Covaccina',
+  'Delicata al Salmone': 'Delicate Salmon',
+  'Dinamite': 'Dynamite',
+  'Faccia da Vecchia': 'Faccia da Vecchia',
+  'Focaccia': 'Focaccia',
+  'Friarella': 'Friarella',
+  'Golosa': 'Greedy',
+  'Gusti e Sapori': 'Gusti e Sapori',
+  'Heidy': 'Heidy',
+  'Il Ciclone': 'The Cyclone',
+  'Il Pizzaiolo': 'The Pizza Chef',
+  'La Spagnola': 'The Spanish',
+  'Margherita': 'Margherita',
+  'Mascarpone': 'Mascarpone',
+  'Messicana': 'Mexican',
+  'Mortadella': 'Mortadella',
+  'Napoli': 'Napoli',
+  'Nostromo': 'Nostromo',
+  'Nutella': 'Nutella',
+  'Panino Greco': 'Greek Sandwich',
+  'Parmigiana': 'Parmigiana',
+  'Patè': 'Olive Pâté',
+  'Patatosa': 'Potato Pizza',
+  'Pistacchiosa': 'Pistachio',
+  'Pizza Chicken': 'Chicken Pizza',
+  'Pizza Sfincione': 'Sfincione Pizza',
+  'Porchettosa': 'Porchetta Pizza',
+  'Porcini': 'Porcini',
+  'Primavera': 'Spring',
+  'Regina': 'Queen',
+  'Romana': 'Romana',
+  'Rustica': 'Rustic',
+  'Salmone': 'Salmon',
+  'Saverio': 'Saverio',
+  'Schiacciata': 'Schiacciata',
+  'Sfilatino': 'Sub',
+  'Sfilatino Nutella': 'Nutella Sub',
+  'Sfilatino Porchetta': 'Porchetta Sub',
+  'Tartufo': 'Truffle',
+  'Tricolore': 'Tricolore',
+  'Vegetariana': 'Vegetarian',
+  '½ Pollo': 'Half Chicken',
+  '1 Coscia': '1 Chicken Leg',
+  'Rosticceria Mignon al Kg': 'Deli by the Kg',
+  'Arancine': 'Arancine',
+  'Crostini': 'Crostini',
+  'Spiedini': 'Spiedini',
+  'Calzoni Fritti': 'Fried Calzoni',
+  'Rizzuole': 'Rizzuole',
+  'Calzoni al Forno': 'Baked Calzoni',
+  'Paesani': 'Paesani',
+  'Capriccioso': 'Capriccioso',
+  'Farfalline': 'Farfalline',
+  'Erbette': 'Erbette',
+  'Focaccine': 'Focaccine',
+  'Rollini': 'Rollini',
+  'Ravazzata': 'Ravazzata',
+  'Sfincionelli': 'Sfincionelli',
+  'Pizzette': 'Mini Pizzas',
+  'Sandwich con Panelle': 'Sandwich with Panelle',
+  'Sandwich con Crocchè di Patate': 'Sandwich with Potato Croquettes',
+  'Focacce con Milza': 'Focacce with Spleen',
+  'Rusticini di Pan Pizza': 'Pan Pizza Rusticini',
+  'La Capricciosa': 'La Capricciosa',
+  'La Margherita': 'La Margherita',
+  'La Rustica': 'La Rustica',
+  'Lo Sfincione': 'Lo Sfincione',
+  'Coca-Cola / Coca Zero / Fanta / Sprite': 'Coca-Cola / Coca Zero / Fanta / Sprite',
+  'Heineken / Beck\'s': 'Heineken / Beck\'s',
+  'Ceres': 'Ceres',
+  'Moretti': 'Moretti',
+  'Daura': 'Daura',
+  'Insolita – Baglio di Pianetto': 'Insolita – Baglio di Pianetto',
+  'Babbio – Gorghi Tondi': 'Babbio – Gorghi Tondi',
+  'Leone – Tenuta Regaleali': 'Leone – Tenuta Regaleali',
+  'Bianco di Nera – G. Milazzo': 'Bianco di Nera – G. Milazzo',
+  'Nero d\'Avola – Baglio di Pianetto': 'Nero d\'Avola – Baglio di Pianetto',
+  'Guarnacche – Tenuta Regaleali': 'Guarnacche – Tenuta Regaleali',
+};
+var PORTION_EN = {
+  'Piccola': 'Small',
+  'Media': 'Medium',
+  'Grande': 'Large',
+  'XL': 'XL',
+  'Box': 'Box',
+  'Box XL': 'Box XL',
+};
+var ANTIPASTI_DESC_EN = {
+  '4 pezzi · Panpizza con pomodorini a cubetti, olio e.v.o., sale e pepe': '4 pieces · Panpizza with diced cherry tomatoes, e.v.o. oil, salt and pepper',
+  '4 pezzi · 1 Romana, 1 Prosciutto crudo e pomodorini, 1 Salmone, 1 Bresaola e pomodorini': '4 pieces · 1 Romana, 1 Cured ham and cherry tomatoes, 1 Salmon, 1 Bresaola and cherry tomatoes',
+  '10 pezzi rosticceria mignon misti': '10 mixed mini bites',
+  'Patatine fritte*, panelle*, verdure in pastella*, anelli di cipolla* e mozzarelline fritte*': 'French fries*, fritters*, battered vegetables*, onion rings* and fried mozzarella sticks*',
+  'Patatine fritte* con salsa cheddar e bacon croccante': 'French fries* with cheddar sauce and crispy bacon',
+  'Patatine fritte*, straccetti di pollo*, chicken nuggets*, alette piccanti* e stick mozzarella*': 'French fries*, chicken strips*, nuggets*, hot wings* and mozzarella sticks*',
+  'Pomodoro, aglio, basilico, pepe, sale e olio e.v.o.': 'Tomato, garlic, basil, pepper, salt and extra virgin olive oil',
+};
+var ROSTICCERIA_DESC_EN = {
+  'Carne e piselli': 'Meat and peas',
+  'Prosciutto cotto, mozzarella e besciamella': 'Cooked ham, mozzarella and béchamel',
+  'Prosciutto cotto e mozzarella': 'Cooked ham and mozzarella',
+  'Emmenthal, caciocavallo, mozzarella e parmigiano': 'Emmental, caciocavallo, mozzarella and parmesan',
+  'Prosciutto cotto, mozzarella, funghi, parmigiano e besciamella': 'Cooked ham, mozzarella, mushrooms, parmesan and béchamel',
+  'Melanzane, mozzarella, speck cotto e scaglie di grana': 'Aubergine, mozzarella, cooked speck and grana flakes',
+  'Salamino piccante, pomodoro a fette e mozzarella': 'Spicy salami, sliced tomato and mozzarella',
+  'Spinaci, prosciutto cotto, mozzarella e besciamella': 'Spinach, cooked ham, mozzarella and béchamel',
+  'Ricotta e spinaci': 'Ricotta and spinach',
+  'Wurstel': 'Frankfurter',
+  'Acciuga, cipolla e pomodoro concentrato': 'Anchovy, onion and tomato concentrate',
+  'Salsa di pomodoro, prosciutto cotto e mozzarella': 'Tomato sauce, cooked ham and mozzarella',
+  'Con ricotta e caciocavallo': 'With ricotta and caciocavallo',
+  'Tutto il banco rosticceria (fritta e al forno)': 'Full deli counter (fried and baked)',
+  'Funghi, prosciutto cotto, mozzarella, wurstel, pomodoro, sale, pepe, olio d\'oliva': 'Mushrooms, cooked ham, mozzarella, frankfurter, tomato, salt, pepper, olive oil',
+  'Pomodoro, mozzarella, sale, pepe, olio d\'oliva': 'Tomato, mozzarella, salt, pepper, olive oil',
+  'Pomodoro a fette, tuma, salame napoli, caciocavallo grattugiato, sale, pepe, olio d\'oliva': 'Sliced tomato, tuma cheese, Naples salami, grated caciocavallo, salt, pepper, olive oil',
+  'Acciuga, salsa di pomodoro concentrato, cipolla, mollica aromatizzata al formaggio': 'Anchovy, concentrated tomato sauce, onion, cheese-flavoured breadcrumbs',
+};
+var POLLO_DESC_EN = {
+  'Con patate fritte e arancinette di riso. Su richiesta: patate al forno pizzaiola o bianche': 'With french fries and rice arancini. On request: oven potatoes pizzaiola or plain',
+};
+var BIBITE_DESC_EN = {
+  'Bottiglia': 'Bottle',
+  'Lattina': 'Can',
+  '66 cl': '66 cl',
+  '33 cl': '33 cl',
+};
+
 function setLang(lang, btn) {
   currentLang = lang;
   document.querySelectorAll('.lang-flag').forEach(function(b){ b.classList.remove('active'); });
   if (btn) btn.classList.add('active');
   var t = TRANSLATIONS[lang];
+  var isEN = lang === 'en';
 
   // Badge
   document.querySelector('.asporto-badge').textContent = t.badge;
@@ -1049,91 +1205,126 @@ function setLang(lang, btn) {
   document.querySelectorAll('.lbl-google').forEach(function(el){ el.textContent = t.google_label; });
   document.querySelectorAll('.lbl-wa').forEach(function(el){ el.textContent = t.wa_label; });
 
-  // Antipasti specific descs
-  var antipastiDescs = {
-    'ANTIPASTO CALDO X2': t.antipasto_caldo,
-    'PATA CHEDDAR E BACON': t.pata_cheddar,
-    'POLLO MIX X2': t.pollo_mix,
-    'BRUSCHETTE ALLA ROMANA': t.bruschette_romana,
-    'TAGLIERE ROSTICCERIA MIGNON': t.tagliere_rosticceria
-  };
-  document.querySelectorAll('#antipasti .item').forEach(function(item) {
-    var nameEl = item.querySelector('.item-name');
-    var descEl = item.querySelector('.item-desc');
-    if (!nameEl) return;
-    var name = nameEl.textContent.trim().toUpperCase();
-    if (antipastiDescs[name] && descEl) {
-      descEl.textContent = antipastiDescs[name];
-    }
-  });
-
-  // Pollo descs
-  document.querySelectorAll('#pollo .item').forEach(function(item) {
-    var nameEl = item.querySelector('.item-name');
-    var descEl = item.querySelector('.item-desc');
-    if (!nameEl || !descEl) return;
-    var name = nameEl.textContent.trim().toUpperCase();
-    if (name.includes('POLLO') || name.includes('½')) descEl.textContent = t.mezzo_pollo;
-    if (name.includes('COSCIA')) descEl.textContent = t.coscia;
-  });
-
-  // Pizza descs
-  if (lang === 'en') {
-    document.querySelectorAll('#pizze .item-desc').forEach(function(el) {
-      var it = el.textContent.trim();
-      if (PIZZA_TRANSLATIONS[it]) el.textContent = PIZZA_TRANSLATIONS[it];
-    });
-  } else {
-    // Restore IT
-    document.querySelectorAll('#pizze .item-desc').forEach(function(el, i) {
-      if (originalValues['pizza_desc_' + i]) el.textContent = originalValues['pizza_desc_' + i];
-    });
-  }
-
   // Farine note
   document.querySelectorAll('.farine-note').forEach(function(el) {
     el.textContent = t.farine_note;
   });
 
-  // Rosticceria subtitles
-  document.querySelectorAll('#rosticceria .subsection-title').forEach(function(el) {
-    var txt = el.textContent.trim();
-    if (txt.includes('Fritta') || txt.includes('Fried')) el.textContent = t.ros_fritta;
-    else if (txt.includes('Forno') || txt.includes('Oven')) el.textContent = t.ros_forno;
-    else if (txt.includes('Taglio') || txt.includes('Slice')) {
-      el.innerHTML = t.pizza_taglio + ' — <span data-key="PIZZA_TAGLIO_KG">10,00€/kg</span>';
-    } else if (txt.includes('Croccant') || txt.includes('Crispy')) {
-      el.innerHTML = t.pizzette + ' — <span data-key="PIZZETTE_CROCCANTI_PEZZO">1,00€</span> ' + (lang==='en'?'each':'al pezzo');
+  // Footer allergens
+  var footerEl = document.querySelector('footer .extra');
+  if (footerEl) {
+    footerEl.textContent = isEN ? '* Frozen products. Allergen information available on request from our staff.' : '* Prodotti surgelati. Informazioni sugli allergeni disponibili su richiesta al personale.';
+  }
+
+  // ALL ITEM NAMES - add/remove translation
+  document.querySelectorAll('.item-name').forEach(function(el) {
+    // Remove existing translation span
+    var existing = el.querySelector('.item-name-tr');
+    if (existing) existing.remove();
+
+    if (isEN) {
+      var itName = el.textContent.trim();
+      var enName = ALL_EN_NAMES[itName];
+      if (enName && enName !== itName) {
+        var tr = document.createElement('span');
+        tr.className = 'item-name-tr';
+        tr.textContent = '(' + enName + ')';
+        el.appendChild(tr);
+      }
     }
   });
 
-  // Rosticceria descs
-  if (lang === 'en') {
-    document.querySelectorAll('#rosticceria .item-desc').forEach(function(el) {
-      var it = el.textContent.trim();
-      if (PIZZA_TRANSLATIONS[it]) el.textContent = PIZZA_TRANSLATIONS[it];
-    });
-    // Pizzette names (they are item-names in rosticceria)
-    var pizzetteNames = [t.piz1,t.piz2,t.piz3,t.piz4,t.piz5,t.piz6,t.piz7];
-    var pizzetteItems = document.querySelectorAll('#rosticceria .subsection-title:last-of-type ~ .item .item-name');
-    // Better: find items after pizzette subsection
-    var inPizzette = false;
-    var pi = 0;
-    document.querySelectorAll('#rosticceria .subsection-title, #rosticceria .item').forEach(function(el) {
-      if (el.classList.contains('subsection-title')) {
-        inPizzette = el.textContent.includes('Crispy') || el.textContent.includes('Croccant');
-        pi = 0;
-      } else if (inPizzette) {
-        var nameEl = el.querySelector('.item-name');
-        if (nameEl && pizzetteNames[pi]) { nameEl.textContent = pizzetteNames[pi]; pi++; }
-      }
-    });
-  } else {
-    // Restore IT rosticceria
-    document.querySelectorAll('#rosticceria .item-desc').forEach(function(el, i) {
-      if (originalValues['ros_desc_' + i]) el.textContent = originalValues['ros_desc_' + i];
-    });
-  }
+  // Portion labels
+  document.querySelectorAll('.price-format-label').forEach(function(el) {
+    if (isEN) {
+      var orig = el.getAttribute('data-it') || el.textContent.trim();
+      el.setAttribute('data-it', orig);
+      el.textContent = PORTION_EN[orig] || orig;
+    } else {
+      var orig = el.getAttribute('data-it');
+      if (orig) el.textContent = orig;
+    }
+  });
+
+  // Antipasti descriptions
+  document.querySelectorAll('#antipasti .item-desc').forEach(function(el) {
+    if (isEN) {
+      var orig = el.getAttribute('data-it') || el.textContent.trim();
+      el.setAttribute('data-it', orig);
+      var en = ANTIPASTI_DESC_EN[orig];
+      if (en) el.textContent = en;
+    } else {
+      var orig = el.getAttribute('data-it');
+      if (orig) el.textContent = orig;
+    }
+  });
+
+  // Pizza descriptions
+  document.querySelectorAll('#pizze .item-desc').forEach(function(el) {
+    if (isEN) {
+      var orig = el.getAttribute('data-it') || el.textContent.trim();
+      el.setAttribute('data-it', orig);
+      var en = PIZZA_TRANSLATIONS[orig];
+      if (en) el.textContent = en;
+    } else {
+      var orig = el.getAttribute('data-it');
+      if (orig) el.textContent = orig;
+    }
+  });
+
+  // Pollo descriptions
+  document.querySelectorAll('#pollo .item-desc').forEach(function(el) {
+    if (isEN) {
+      var orig = el.getAttribute('data-it') || el.textContent.trim();
+      el.setAttribute('data-it', orig);
+      var en = POLLO_DESC_EN[orig];
+      if (en) el.textContent = en;
+    } else {
+      var orig = el.getAttribute('data-it');
+      if (orig) el.textContent = orig;
+    }
+  });
+
+  // Rosticceria subtitles
+  document.querySelectorAll('#rosticceria .subsection-title').forEach(function(el) {
+    if (isEN) {
+      var orig = el.getAttribute('data-it') || el.textContent.trim();
+      el.setAttribute('data-it', orig);
+      if (orig.includes('Fritta')) el.textContent = t.ros_fritta;
+      else if (orig.includes('Forno')) el.textContent = t.ros_forno;
+      else if (orig.includes('Taglio')) el.innerHTML = t.pizza_taglio + ' — <span data-key="PIZZA_TAGLIO_KG">10,00€/kg</span>';
+      else if (orig.includes('Croccant') || orig.includes('Pizzette')) el.innerHTML = t.pizzette + ' — <span data-key="PIZZETTE_CROCCANTI_PEZZO">1,00€</span> each';
+    } else {
+      var orig = el.getAttribute('data-it');
+      if (orig) el.textContent = orig;
+    }
+  });
+
+  // Rosticceria descriptions
+  document.querySelectorAll('#rosticceria .item-desc').forEach(function(el) {
+    if (isEN) {
+      var orig = el.getAttribute('data-it') || el.textContent.trim();
+      el.setAttribute('data-it', orig);
+      var en = ROSTICCERIA_DESC_EN[orig];
+      if (en) el.textContent = en;
+    } else {
+      var orig = el.getAttribute('data-it');
+      if (orig) el.textContent = orig;
+    }
+  });
+
+  // Bibite descriptions
+  document.querySelectorAll('#bibite .item-desc').forEach(function(el) {
+    if (isEN) {
+      var orig = el.getAttribute('data-it') || el.textContent.trim();
+      el.setAttribute('data-it', orig);
+      var en = BIBITE_DESC_EN[orig];
+      if (en) el.textContent = en;
+    } else {
+      var orig = el.getAttribute('data-it');
+      if (orig) el.textContent = orig;
+    }
+  });
 }
 
 // Store IT originals on load
