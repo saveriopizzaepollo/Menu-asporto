@@ -741,9 +741,45 @@ var pricesRef = db.ref('prices_asporto');
 pricesRef.on('value', function(snapshot) {
   var data = snapshot.val();
   if (!data) return;
+
+  // Restore prices
   document.querySelectorAll('[data-key]').forEach(function(el) {
     var key = el.getAttribute('data-key');
     if (data[key] !== undefined) el.textContent = data[key];
+  });
+
+  // Restore product data (names, descs, visibility)
+  document.querySelectorAll('section[id]').forEach(function(section) {
+    var sid = section.getAttribute('id');
+    var items = section.querySelectorAll('.item');
+    items.forEach(function(item, idx) {
+      var baseKey = 'ITEM_' + sid.toUpperCase() + '_' + idx;
+
+      // Restore name
+      var nameKey = baseKey + '_NAME';
+      if (data[nameKey] !== undefined) {
+        var nameEl = item.querySelector('.item-name');
+        if (nameEl) {
+          // Keep only first text node, remove translation spans
+          var tr = nameEl.querySelector('.item-name-tr');
+          nameEl.textContent = data[nameKey];
+          if (tr) nameEl.appendChild(tr);
+        }
+      }
+
+      // Restore description
+      var descKey = baseKey + '_DESC';
+      if (data[descKey] !== undefined) {
+        var descEl = item.querySelector('.item-desc');
+        if (descEl) descEl.textContent = data[descKey];
+      }
+
+      // Restore visibility
+      var visKey = baseKey + '_HIDDEN';
+      if (data[visKey] === true) {
+        item.style.display = 'none';
+      }
+    });
   });
 });
 
@@ -1517,6 +1553,8 @@ function saveAllAdmin() {
     var item = items[idx];
     if (!item) return;
 
+    var baseKey = 'ITEM_' + sectionId.toUpperCase() + '_' + idx;
+
     var nameEl = item.querySelector('.item-name');
     var descEl = item.querySelector('.item-desc');
     var priceEl = item.querySelector('.item-price');
@@ -1530,18 +1568,29 @@ function saveAllAdmin() {
     var priceFInput = card.querySelector('.adm-price-f');
     var portionInputs = card.querySelectorAll('.adm-portion');
 
-    if (nameInput && nameEl) nameEl.textContent = nameInput.value;
-    if (descInput) {
-      if (descEl) {
-        descEl.textContent = descInput.value;
-      } else if (descInput.value) {
-        var newDesc = document.createElement('div');
-        newDesc.className = 'item-desc';
-        newDesc.textContent = descInput.value;
-        var left = item.querySelector('.item-left');
-        if (left) left.appendChild(newDesc);
-      }
+    // Save name
+    if (nameInput && nameEl) {
+      var newName = nameInput.value;
+      nameEl.textContent = newName;
+      fbUpdates[baseKey + '_NAME'] = newName;
     }
+
+    // Save description
+    if (descInput) {
+      var newDesc = descInput.value;
+      if (descEl) {
+        descEl.textContent = newDesc;
+      } else if (newDesc) {
+        var newDescEl = document.createElement('div');
+        newDescEl.className = 'item-desc';
+        newDescEl.textContent = newDesc;
+        var left = item.querySelector('.item-left');
+        if (left) left.appendChild(newDescEl);
+      }
+      fbUpdates[baseKey + '_DESC'] = newDesc;
+    }
+
+    // Save prices
     if (priceInput && priceEl) {
       priceEl.textContent = priceInput.value;
       var k = priceInput.getAttribute('data-key');
@@ -1562,6 +1611,19 @@ function saveAllAdmin() {
         portionVals[pi].textContent = inp.value;
         var k = inp.getAttribute('data-key');
         if (k) fbUpdates[k] = inp.value;
+      }
+    });
+  });
+
+  // Save hidden items
+  document.querySelectorAll('section[id]').forEach(function(section) {
+    var sid = section.getAttribute('id');
+    section.querySelectorAll('.item').forEach(function(item, idx) {
+      var baseKey = 'ITEM_' + sid.toUpperCase() + '_' + idx;
+      if (item.style.display === 'none') {
+        fbUpdates[baseKey + '_HIDDEN'] = true;
+      } else {
+        fbUpdates[baseKey + '_HIDDEN'] = false;
       }
     });
   });
